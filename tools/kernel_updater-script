@@ -1,6 +1,5 @@
 ui_print(">>");
-ui_print(">> CyanogenMod Bootimage Updater");
-ui_print(">> for the Mackay Kernel");
+ui_print(">> The Arrow Kernel");
 ui_print(">>");
 
 show_progress(0.100000, 5);
@@ -49,6 +48,6 @@ assert(package_extract_file("boot.img", "/tmp/boot.img"),
        delete("/tmp/boot.img"));
 
 ui_print(" ");
-ui_print("Mackay kernel successfuly installed.");
+ui_print("The Arrow kernel successfuly installed.");
 show_progress(0.100000, 1);
 unmount("/system");
