@@ -47,7 +47,7 @@ zip -qr ../arrow-galaxysmtd-$DATE.zip ./
 cd ..
 
 echo "Signing package..."
-java -jar ../out/host/linux-x86/framework/signapk.jar arrow-galaxysmtd-$DATE.zip arrow-galaxysmtd-$DATE-signed.zip
+java -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/testkey.x509.pem build/target/product/security/testkey.pk8 arrow-galaxysmtd-$DATE.zip arrow-galaxysmtd-$DATE-signed.zip
 rm arrow-galaxysmtd-$DATE.zip
 md5sum arrow-galaxysmtd-$DATE-signed.zip
 echo "Finished build"
