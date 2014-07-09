@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+
+out=out/target/product/galaxysmtd/
+DATE=$(date +"%Y%m%d")
+
+## Clean up environment
+echo "Cleaning old builds"
+make clobber
+
+## Compile kernel
+echo "Lunching device"
+source build/envsetup.sh
+lunch pa_galaxysmtd-userdebug
+echo "Building image"
+mka bootimage
+
+## Check if signapk is built
+if [ ! -e $androidtop/out/host/linux-x86/framework/signapk.jar ]
+then
+  echo "Signapk.jar not found, rebuilding..."
+  mka signapk
+fi
+
+## Clean old zip
+rm -rf kernel_zip
+mkdir -p kernel_zip/system/app
+mkdir -p kernel_zip/system/etc/init.d
+mkdir -p kernel_zip/system/lib/modules
+mkdir -p kernel_zip/META-INF/com/google/android
+
+## Add files
+echo "Copying boot.img ..."
+cp `echo $out`/boot.img kernel_zip/
+echo "Copying kernel modules ..."
+cp -R `echo $out`/system/lib/modules/* kernel_zip/system/lib/modules
+echo "Copying update-binary ..."
+cp tools/update-binary kernel_zip/META-INF/com/google/android/update-binary
+echo "Copying apps & lights.aries.so ..."
+cp -R tools/flash/* kernel_zip/
+echo "Copying stock updater-script ..."
+cat tools/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
+
+echo "Zipping package..."
+cd kernel_zip
+zip -qr ../arrow-galaxysmtd-$DATE.zip ./
+cd ..
+
+echo "Signing package..."
+java -jar ../out/host/linux-x86/framework/signapk.jar arrow-galaxysmtd-$DATE.zip arrow-galaxysmtd-$DATE-signed.zip
+rm arrow-galaxysmtd-$DATE.zip
+md5sum arrow-galaxysmtd-$DATE-signed.zip
+echo "Finished build"
