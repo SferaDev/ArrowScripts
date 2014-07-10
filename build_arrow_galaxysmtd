@@ -1,8 +1,11 @@
 #!/bin/bash
 #
 
-out=out/target/product/galaxysmtd/
+out=../out/target/product/galaxysmtd/
 DATE=$(date +"%Y%m%d")
+
+## GoTo build environment aka ../
+cd ..
 
 ## Clean up environment
 echo "Cleaning old builds"
@@ -21,6 +24,9 @@ then
   echo "Signapk.jar not found, rebuilding..."
   mka signapk
 fi
+
+## GoTo Arrow Folder and do random stuff
+cd Arrow
 
 ## Clean old zip
 rm -rf kernel_zip
@@ -43,8 +49,8 @@ cat tools/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater
 
 echo "Zipping package..."
 cd kernel_zip
-zip -qr ../arrow-galaxysmtd-$DATE.zip ./
-cd ..
+zip -qr ../../arrow-galaxysmtd-$DATE.zip ./
+cd ../../
 
 echo "Signing package..."
 java -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/testkey.x509.pem build/target/product/security/testkey.pk8 arrow-galaxysmtd-$DATE.zip arrow-galaxysmtd-$DATE-signed.zip
