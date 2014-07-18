@@ -39,6 +39,7 @@ make clobber
 ## Check if device repo is there
 if [ -d device/samsung/galaxysmtd ]
 then
+  echo "Cleaning galaxysmtd repo"
   cd device/samsung/galaxysmtd
   git reset --hard
   cd ../../..
