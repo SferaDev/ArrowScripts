@@ -36,9 +36,13 @@ rm -rvf .repo/local_manifests/roomservice.xml
 cp Arrow/dependencies/arrow.xml .repo/local_manifests/roomservice.xml
 echo "Cleaning old builds"
 make clobber
-cd device/samsung/galaxysmtd
-git reset --hard
-cd ../../..
+## Check if device repo is there
+if [ -d device/samsung/galaxysmtd ]
+then
+  cd device/samsung/galaxysmtd
+  git reset --hard
+  cd ../../..
+fi
 repo sync -j32
 
 ## Per case option
@@ -84,7 +88,7 @@ echo "Building image"
 mka bootimage
 
 ## Check if signapk is built
-if [ ! -e $androidtop/out/host/linux-x86/framework/signapk.jar ]
+if [ ! -e out/host/linux-x86/framework/signapk.jar ]
 then
   echo "Signapk.jar not found, rebuilding..."
   mka signapk
