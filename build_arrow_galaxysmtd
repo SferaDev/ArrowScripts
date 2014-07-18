@@ -24,6 +24,7 @@ echo "Option 3: Build with Experimental features (Only CWM)"
 echo "Option 4: Create a changelog"
 echo
 
+## Add common flags
 out=../out/target/product/galaxysmtd/
 DATE=$(date +"%Y%m%d")
 
@@ -33,7 +34,7 @@ read -p "Your option: " OPTION
 echo "Cleaning up stuff"
 cd ..
 rm -rvf .repo/local_manifests/roomservice.xml
-cp Arrow/dependencies/arrow.xml .repo/local_manifests/roomservice.xml
+cp -v Arrow/dependencies/arrow.xml .repo/local_manifests/roomservice.xml
 echo "Cleaning old builds"
 make clobber
 ## Check if device repo is there
@@ -52,7 +53,7 @@ case $OPTION in
 echo "Setting CWM..."
 ziptag=CWM
 rm -rvf device/samsung/galaxysmtd/pa.dependencies
-cp Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
+cp -v Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
 echo "Lunching device"
 source build/envsetup.sh
 lunch pa_galaxysmtd-userdebug
@@ -61,19 +62,20 @@ lunch pa_galaxysmtd-userdebug
 echo "Setting TWRP..."
 ziptag=TWRP
 rm -rvf device/samsung/galaxysmtd/pa.dependencies
-cp Arrow/dependencies/twrp.dependencies device/samsung/galaxysmtd/pa.dependencies
+cp -v Arrow/dependencies/twrp.dependencies device/samsung/galaxysmtd/pa.dependencies
 echo "Lunching device"
 source build/envsetup.sh
 lunch pa_galaxysmtd-userdebug
 cd device/samsung/aries-common
+echo "Adding needed stuff for TWRP"
 git revert 60d649198cca8b1040136a7ca091a1c386404b01 --no-edit
 cd ../../..
 ;;
 "3")
-echo "Setting CWM..."
+echo "Setting CMA..."
 ziptag=CMA
 rm -rvf device/samsung/galaxysmtd/pa.dependencies
-cp Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
+cp -v Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
 echo "Lunching device"
 source build/envsetup.sh
 lunch pa_galaxysmtd-userdebug
@@ -107,13 +109,13 @@ mkdir -p kernel_zip/META-INF/com/google/android
 
 ## Add files
 echo "Copying boot.img ..."
-cp `echo $out`/boot.img kernel_zip/
+cp -v `echo $out`/boot.img kernel_zip/
 echo "Copying kernel modules ..."
-cp -R `echo $out`/system/lib/modules/* kernel_zip/system/lib/modules
+cp -vR `echo $out`/system/lib/modules/* kernel_zip/system/lib/modules
 echo "Copying update-binary ..."
-cp tools/update-binary kernel_zip/META-INF/com/google/android/update-binary
+cp -v tools/update-binary kernel_zip/META-INF/com/google/android/update-binary
 echo "Copying apps & lights.aries.so ..."
-cp -R tools/flash/* kernel_zip/
+cp -vR tools/flash/* kernel_zip/
 echo "Copying stock updater-script ..."
 cat tools/kernel_updater-script > kernel_zip/META-INF/com/google/android/updater-script
 
