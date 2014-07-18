@@ -1,20 +1,84 @@
 #!/bin/bash
-#
+#    Copyright (C) 2013 SferaDev
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>
+
+clear
+echo "Welcome $USER"
+echo
+echo "What can I do for you?"
+echo "Option 1: Build with CWM"
+echo "Option 2: Build with TWRP"
+echo "Option 3: Build with Experimental features (Only CWM)"
+echo "Option 4: Create a changelog"
+echo
 
 out=../out/target/product/galaxysmtd/
 DATE=$(date +"%Y%m%d")
 
-## GoTo build environment aka ../
-cd ..
+read -p "Your option: " OPTION
 
-## Clean up environment
+## Cleaning Environment
+echo "Cleaning up stuff"
+cd ..
+rm -rf .repo/local_manifests/roomservice.xml
 echo "Cleaning old builds"
 make clobber
+repo sync -j32
 
-## Compile kernel
+## Per case option
+case $OPTION in
+"1")
+echo "Setting CWM..."
+ziptag=CWM
+rm -rf device/samsung/galaxysmtd/pa.dependencies
+cp Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
 echo "Lunching device"
 source build/envsetup.sh
 lunch pa_galaxysmtd-userdebug
+repo sync -j32
+;;
+"2")
+echo "Setting TWRP..."
+ziptag=TWRP
+rm -rf device/samsung/galaxysmtd/pa.dependencies
+cp Arrow/dependencies/twrp.dependencies device/samsung/galaxysmtd/pa.dependencies
+echo "Lunching device"
+source build/envsetup.sh
+lunch pa_galaxysmtd-userdebug
+repo sync -j32
+cd device/samsung/aries-common
+git revert 60d649198cca8b1040136a7ca091a1c386404b01 --no-edit
+cd ../../..
+;;
+"3")
+echo "Setting CWM..."
+ziptag=CMA
+rm -rf device/samsung/galaxysmtd/pa.dependencies
+cp Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
+echo "Lunching device"
+source build/envsetup.sh
+lunch pa_galaxysmtd-userdebug
+repo sync -j32
+cd kernel/samsung/aries
+git fetch github
+git merge github/cma
+cd ../../..
+;;
+esac
+
+## Compile kernel
 echo "Building image"
 mka bootimage
 
@@ -55,5 +119,14 @@ cd ../../
 echo "Signing package..."
 java -jar out/host/linux-x86/framework/signapk.jar build/target/product/security/testkey.x509.pem build/target/product/security/testkey.pk8 arrow-galaxysmtd-$DATE.zip arrow-galaxysmtd-$DATE-signed.zip
 rm arrow-galaxysmtd-$DATE.zip
-md5sum arrow-galaxysmtd-$DATE-signed.zip
+
+## Create md5
+md5sum arrow-galaxysmtd-$DATE-$ziptag.zip > arrow-galaxysmtd-$DATE-$ziptag.zip.md5
+
+## The End
 echo "Finished build"
+
+## Upload
+scp arrow-galaxysmtd-$DATE-$ziptag.* sferadev@host.sferadev.com:~/public_html/Arrow/
+
+exit 0
