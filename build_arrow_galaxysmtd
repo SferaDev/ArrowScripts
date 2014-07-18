@@ -27,6 +27,7 @@ echo
 ## Add common flags
 out=../out/target/product/galaxysmtd/
 DATE=$(date +"%Y%m%d")
+EXTRAS="$1"
 
 read -p "Your option: " OPTION
 
@@ -135,7 +136,10 @@ md5sum arrow-galaxysmtd-$DATE-$ziptag.zip > arrow-galaxysmtd-$DATE-$ziptag.zip.m
 echo "Finished build"
 
 ## Upload
-scp arrow-galaxysmtd-$DATE-$ziptag.* sferadev@host.sferadev.com:~/public_html/Arrow/
+if [ "$EXTRAS" == "upload" ]
+then
+  scp arrow-galaxysmtd-$DATE-$ziptag.* sferadev@host.sferadev.com:~/public_html/Arrow/
+fi
 
 ## Restore Environment to non Arrow state
 rm -rvf .repo/local_manifests/roomservice.xml
