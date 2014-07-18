@@ -35,7 +35,9 @@ cd ..
 rm -rvf .repo/local_manifests/roomservice.xml
 echo "Cleaning old builds"
 make clobber
-repo forall -c git reset --hard
+cd device/samsung/galaxysmtd
+git reset --hard
+cd ../../..
 repo sync -j32
 
 ## Per case option
@@ -129,7 +131,9 @@ scp arrow-galaxysmtd-$DATE-$ziptag.* sferadev@host.sferadev.com:~/public_html/Ar
 
 ## Restore Environment to non Arrow state
 rm -rvf .repo/local_manifests/roomservice.xml
-repo forall -c git reset --hard
+cd device/samsung/galaxysmtd
+git reset --hard
+cd ../../..
 repo sync -j32
 
 exit 0
