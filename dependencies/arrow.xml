@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Please do not manually edit this file-->
 <manifest>
+  <project name="AOSPA-legacy/android_device_samsung_galaxysmtd" path="device/samsung/galaxysmtd" remote="github" revision="kitkat" />
+  <project name="AOSPA-legacy/android_device_samsung_aries-common" path="device/samsung/aries-common" remote="github" revision="kitkat" />
+  <project name="AOSPA-legacy/android_kernel_samsung_aries" path="kernel/samsung/aries" remote="github" revision="wip" />
+  <project name="CyanogenMod/android_hardware_samsung" path="hardware/samsung" remote="github" revision="cm-11.0" />
   <project name="SferaDev/ArrowScripts" path="Arrow" remote="github" revision="master" />
+  <project name="proprietary_vendor_samsung" path="vendor/samsung" remote="blobs" revision="cm-11.0" />
 </manifest>
