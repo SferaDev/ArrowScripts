@@ -32,7 +32,7 @@ read -p "Your option: " OPTION
 ## Cleaning Environment
 echo "Cleaning up stuff"
 cd ..
-rm -rf .repo/local_manifests/roomservice.xml
+rm -rvf .repo/local_manifests/roomservice.xml
 echo "Cleaning old builds"
 make clobber
 repo sync -j32
@@ -42,7 +42,7 @@ case $OPTION in
 "1")
 echo "Setting CWM..."
 ziptag=CWM
-rm -rf device/samsung/galaxysmtd/pa.dependencies
+rm -rvf device/samsung/galaxysmtd/pa.dependencies
 cp Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
 echo "Lunching device"
 source build/envsetup.sh
@@ -52,7 +52,7 @@ repo sync -j32
 "2")
 echo "Setting TWRP..."
 ziptag=TWRP
-rm -rf device/samsung/galaxysmtd/pa.dependencies
+rm -rvf device/samsung/galaxysmtd/pa.dependencies
 cp Arrow/dependencies/twrp.dependencies device/samsung/galaxysmtd/pa.dependencies
 echo "Lunching device"
 source build/envsetup.sh
@@ -65,7 +65,7 @@ cd ../../..
 "3")
 echo "Setting CWM..."
 ziptag=CMA
-rm -rf device/samsung/galaxysmtd/pa.dependencies
+rm -rvf device/samsung/galaxysmtd/pa.dependencies
 cp Arrow/dependencies/cwm.dependencies device/samsung/galaxysmtd/pa.dependencies
 echo "Lunching device"
 source build/envsetup.sh
@@ -93,7 +93,7 @@ fi
 cd Arrow
 
 ## Clean old zip
-rm -rf kernel_zip
+rm -rvf kernel_zip
 mkdir -p kernel_zip/system/app
 mkdir -p kernel_zip/system/etc/init.d
 mkdir -p kernel_zip/system/lib/modules
