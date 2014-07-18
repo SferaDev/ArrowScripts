@@ -33,6 +33,7 @@ read -p "Your option: " OPTION
 echo "Cleaning up stuff"
 cd ..
 rm -rvf .repo/local_manifests/roomservice.xml
+cp Arrow/dependencies/arrow.xml .repo/local_manifests/roomservice.xml
 echo "Cleaning old builds"
 make clobber
 cd device/samsung/galaxysmtd
