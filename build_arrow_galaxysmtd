@@ -139,7 +139,9 @@ scp arrow-galaxysmtd-$DATE-$ziptag.* sferadev@host.sferadev.com:~/public_html/Ar
 
 ## Restore Environment to non Arrow state
 rm -rvf .repo/local_manifests/roomservice.xml
+cp -v Arrow/dependencies/arrow.xml .repo/local_manifests/roomservice.xml
 cd device/samsung/galaxysmtd
 git reset --hard
 cd ../../..
+rm -rf Arrow/kernel_zip/
 repo sync -j32
