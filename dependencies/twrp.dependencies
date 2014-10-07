@@ -15,7 +15,7 @@
     "remote":       "github",
     "repository":   "AOSPA-legacy/android_kernel_samsung_aries",
     "target_path":  "kernel/samsung/aries",
-    "revision":     "wip"
+    "revision":     "kitkat"
   },
   {
     "remote":       "github",
